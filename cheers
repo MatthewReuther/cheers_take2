@@ -3,7 +3,7 @@
 # puts "I'd cheer for you, if only I knew who you were :(\nTry again with `./cheers.rb [Name] [MM/DD Birthday]"
 
 
-puts <<EOS 
+puts <<EOS
 I'd cheer for you, if only I knew who you were :(
 Try again with `./cheers.rb [Name] [MM/DD Birthday]
 EOS
