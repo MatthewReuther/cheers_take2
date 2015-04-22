@@ -1,4 +1,4 @@
-require 'minitest/autorun'
+require_relative 'helper'
 
 class TestCheersIntegration < Minitest::Test
 
