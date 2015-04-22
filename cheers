@@ -3,8 +3,6 @@
 # puts "I'd cheer for you, if only I knew who you were :(\nTry again with `./cheers.rb [Name] [MM/DD Birthday]"
 # ARGV is an array i.e. when we write abbey it get pushed into the ARGV array, Abbys name is the name in index 0 of the ARGV array
 
-#!/usr/bin/env ruby
-
 def exit_with_usage_instructions
   puts <<EOS
 I'd cheer for you, if only I knew who you were :(
@@ -27,3 +25,6 @@ end
 puts "#{original_name}’s just GRAND!"
 puts ""
 puts "I would wish you a Happy Birthday, if I knew when that was!"
+
+
+
