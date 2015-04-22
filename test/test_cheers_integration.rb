@@ -3,7 +3,7 @@ require_relative 'helper'
 class TestCheersIntegration < Minitest::Test
 
 # 0 args -> help message
-  def test_help_message
+  def test_no_arguments_help_message
     output = `./cheers`
     expected = <<EOS
 I'd cheer for you, if only I knew who you were :(
@@ -12,66 +12,23 @@ EOS
     assert_equal expected, output
   end
 
-# two valid arguments
-  def test_1a_valid_arguments_name_mm_dd
-    output = `./cheers Abby 08/25`
-    expected = <<EOS
-Give me an... A
-Give me a... B
-Give me a... B
-Give me a... Y
-Abby’s just GRAND!
+# One valid argument given Name
 
-Awesome! Your birthday is in 127 days! Happy Birthday in advance!
-EOS
-  assert_equal expected, output
-  end
-
-  def test_1b_one_valid_and_one_invalid_arguments
-    output = `./cheers Abby 328/25`
-    expected = <<EOS
-Give me an... A
-Give me a... B
-Give me a... B
-Give me a... Y
-Abby’s just GRAND!
-EOS
-  assert_equal expected, output
-  end
-
-  def test_1c_one_invalid_and_one_valid_arguments
-    output = `./cheers Abb123y 08/25`
-    expected = <<EOS
-Awesome! Your birthday is in 127 days! Happy Birthday in advance!
-EOS
-  assert_equal expected, output
-  end
-
-  def test_1d_two_invalid_arguments
-    output = `./cheers Abb123y 01238/25`
-    expected = <<EOS
-I'd cheer for you, if only I knew who you were :(
-Try again with `./cheers.rb [Name] [MM/DD Birthday]
-EOS
-  assert_equal expected, output
-  end
-
-# Name 1 Valid Argument
-  def test_2a_one_valid_argument_name
+  def test_1a_one_valid_argument_given_name
     output = `./cheers Abby`
     expected = <<EOS
 Give me an... A
 Give me a... B
 Give me a... B
 Give me a... Y
-
 Abby’s just GRAND!
-EOS
 
+I would wish you a Happy Birthday, if I knew when that was!
+EOS
   assert_equal expected, output
   end
 
-  def test_2b_one_valid_argument_name_hyphen
+  def test_1b_one_valid_argument_given_hyphenated_name
     output = `./cheers Abby-Gale`
     expected = <<EOS
 Give me an... A
@@ -84,112 +41,186 @@ Give me a... L
 Give me an... E
 
 Abby-Gale’s just GRAND!
-EOS
-  end
 
-# Invalid Names
-def test_3a_invalid_argument_date_for_name
-    output = `./cheers 08/25`
-    expected = <<EOS
-<<EOS
-I'd cheer for you, if only I knew who you were :(
-Try again with `./cheers.rb [Name]
+I would wish you a Happy Birthday, if I knew when that was!
 EOS
+
   assert_equal expected, output
   end
 
-def test_3b_invalid_argument_symbols_for_name
-    output = `./cheers ~1234567890_+=!@#{}$%*():><`
+  def test_1c_one_valid_argument_with_spaces_between_name
+    output = `./cheers "Mary Clare"`
     expected = <<EOS
-<<EOS
-I'd cheer for you, if only I knew who you were :(
-Try again with `./cheers.rb [Name]
+Give me an... M
+Give me a... A
+Give me a... R
+Give me a... Y
+Give me a... C
+Give me an... L
+Give me a... A
+Give me an... R
+Give me an... E
+
+Mary Clare’s just GRAND!
+
+I would wish you a Happy Birthday, if I knew when that was!
 EOS
+
   assert_equal expected, output
   end
 
-def test_3c_invalid_argument_string_for_name
-    output = `./cheers ""`
-    expected = <<EOS
-<<EOS
-I'd cheer for you, if only I knew who you were :(
-Try again with `./cheers.rb [Name]
-EOS
-  assert_equal expected, output
-  end
+# One Valid Argument Given only Date
 
-def test_3d_invalid_argument_whitespace_for_name
-    output = `./cheers "  "`
-    expected = <<EOS
-<<EOS
-I'd cheer for you, if only I knew who you were :(
-Try again with `./cheers.rb [Name]
-EOS
-  assert_equal expected, output
-  end
-
-#valid months
-  def test_4a_valid_argument_month_m_dd
+  def test_2a_one_valid_argument_given_month_mdd_instead_of_name
     output = `./cheers 8/25`
     expected = <<EOS
-<<EOS
-Awesome! Your birthday is in 127 days! Happy Birthday in advance!
+
+Awesome! Your birthday is in 126 days! Happy Birthday in advance!
 EOS
   assert_equal expected, output
   end
 
-  def test_4b_valid_argument_month_mm_dd
+  def test_2b_one_valid_argument_given_month_mmdd_instead_of_name
     output = `./cheers 08/25`
     expected = <<EOS
-<<EOS
-Awesome! Your birthday is in 127 days! Happy Birthday in advance!
+
+Awesome! Your birthday is in 126 days! Happy Birthday in advance!
 EOS
   assert_equal expected, output
   end
 
-#birthdays that have already happened
-def test_5a_two_valid_args_projected_birthday
+  def test_5b_one_valid_argument_given_birthday_that_has_occured_this_year
+    skip
+    output = `./cheers 04/21`
+    expected = <<EOS
+
+Awesome! Your birthday is in 365 days! Happy Birthday in advance!
+EOS
+    assert_equal expected, output
+  end
+
+
+
+# One Invalid Argument Given Incorrect Name
+
+def test_3a_one_invalid_argument_gave_date_for_name
+    output = `./cheers 8/25`
+    expected = <<EOS
+I'd cheer for you, if only I knew who you were :(
+Try again with `./cheers.rb [Name] [MM/DD Birthday]
+EOS
+  assert_equal expected, output
+  end
+
+def test_3b_one_invalid_argument_non_word_characters_in_name
+    output = `./cheers ~?!@#{}$%*():><`
+    expected = <<EOS
+I'd cheer for you, if only I knew who you were :(
+Try again with `./cheers.rb [Name] [MM/DD Birthday]
+EOS
+  assert_equal expected, output
+  end
+
+def test_3c_one_invalid_argument_string_for_name
+    output = `./cheers ""`
+    expected = <<EOS
+I'd cheer for you, if only I knew who you were :(
+Try again with `./cheers.rb [Name] [MM/DD Birthday]
+EOS
+  assert_equal expected, output
+  end
+
+def test_3d_one_invalid_argument_whitespace_for_name
+    output = `./cheers "  "`
+    expected = <<EOS
+I'd cheer for you, if only I knew who you were :(
+Try again with `./cheers.rb [Name] [MM/DD Birthday]
+EOS
+  assert_equal expected, output
+  end
+
+
+
+
+# One Invalid Argument Given Incorrect Month
+
+  def test_4a_one_invalid_argument_non_number_characters_for_date
+    output = `./cheers @x/!x`
+    expected = <<EOS
+I couldn't understand that. Could you give that to me in mm/dd format next time?
+EOS
+  assert_equal expected, output
+  end
+
+  def test_4b_one_invalid_argument_month_mm_dd
+    output = `./cheers 25/08`
+    expected = <<EOS
+I couldn't understand that. Could you give that to me in mm/dd format next time?
+EOS
+  assert_equal expected, output
+  end
+
+  def test_4c_one_invalid_argument_month_mm_dd_yyyy
+    output = `./cheers 08/25/2015`
+    expected = <<EOS
+I couldn't understand that. Could you give that to me in mm/dd format next time?
+EOS
+  assert_equal expected, output
+  end
+
+
+# Test that Tests Two Valid Arguments
+
+  def test_5a_two_valid_arguments_name_mm_dd
     output = `./cheers Abby 08/25`
     expected = <<EOS
 Give me an... A
 Give me a... B
 Give me a... B
 Give me a... Y
-Abby's just GRAND!
+Abby’s just GRAND!
 
-Awesome! Your birthday is in 127 days! Happy Birthday in advance!
+Awesome! Your birthday is in 126 days! Happy Birthday in advance!
 EOS
-    assert_equal expected, output
+  assert_equal expected, output
   end
 
-  def test_5b_two_valid_args_birthday_has_not_occured_this_year
-    output = `./cheers Abby 04/21`
+
+# Test that Tests One Valid and Invalid Argument
+
+  def test_6a_one_valid_and_one_invalid_argument
+    output = `./cheers Abby xA/25`
     expected = <<EOS
 Give me an... A
 Give me a... B
 Give me a... B
 Give me a... Y
-Abby's just GRAND!
-Awesome! Your birthday is in 365 days! Happy Birthday in advance!
-EOS
-    assert_equal expected, output
-  end
+Abby’s just GRAND!
 
-#invalid months
-  def test_6a_invalid_argument_month_mm_dd
-    output = `./cheers 25/08`
-    expected = <<EOS
-<<EOS
-Awesome! Your birthday is in 127 days! Happy Birthday in advance!
+
+I couldn't understand that. Could you give that to me in mm/dd format?
 EOS
   assert_equal expected, output
   end
 
-  def test_6b_valid_argument_month_mm_dd_yyyy
-    output = `./cheers 08/25/2015`
+# Test that Tests One Invalid and Valid Argument
+
+  def test_7a_one_invalid_and_one_valid_argument
+    output = `./cheers ~?!@#{}$% 08/25`
     expected = <<EOS
-<<EOS
-Awesome! Your birthday is in 127 days! Happy Birthday in advance!
+I'd cheer for you, if only I knew who you were :(
+Try again with `./cheers.rb [Name] [MM/DD Birthday]
+EOS
+  assert_equal expected, output
+  end
+
+# Test that Tests Two Arguments
+
+  def test_1d_two_invalid_arguments
+    output = `./cheers ~?!@#{}$% 01238/25`
+    expected = <<EOS
+I'd cheer for you, if only I knew who you were :(
+Try again with `./cheers.rb [Name] [MM/DD Birthday]
 EOS
   assert_equal expected, output
   end
