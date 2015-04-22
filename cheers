@@ -1,9 +1,29 @@
 #!/usr/bin/env ruby
 
 # puts "I'd cheer for you, if only I knew who you were :(\nTry again with `./cheers.rb [Name] [MM/DD Birthday]"
+# ARGV is an array i.e. when we write abbey it get pushed into the ARGV array, Abbys name is the name in index 0 of the ARGV array
 
+#!/usr/bin/env ruby
 
-puts <<EOS
+def exit_with_usage_instructions
+  puts <<EOS
 I'd cheer for you, if only I knew who you were :(
 Try again with `./cheers.rb [Name] [MM/DD Birthday]
 EOS
+  exit
+end
+
+exit_with_usage_instructions if ARGV.empty?
+
+original_name = ARGV[0]
+cheerable_name = original_name.upcase.gsub(/[^A-Z]/, "")
+exit_with_usage_instructions if cheerable_name.empty?
+
+cheerable_name.each_char do |char|
+  article = "n" if "HALFNORSEMIX".include? char
+  puts "Give me a#{article}... #{char}"
+end
+
+puts "#{original_name}’s just GRAND!"
+puts ""
+puts "I would wish you a Happy Birthday, if I knew when that was!"
