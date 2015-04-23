@@ -13,6 +13,7 @@ EOS
   end
 
 # Test all letters that need an before them
+
   def test_1a_all_an_letters
     output = `./cheers AEFHILMNORSX`
     expected = <<EOS
@@ -94,13 +95,15 @@ EOS
 # One Invalid Argument Given Incorrect Name
 
 def test_3a_one_invalid_argument_gave_date_for_name
-    output = `./cheers 8/25`
+    output = `./cheers 08/25`
     expected = <<EOS
 I'd cheer for you, if only I knew who you were :(
 Try again with `./cheers.rb [Name] [MM/DD Birthday]
 EOS
   assert_equal expected, output
   end
+
+
 
 def test_3b_one_invalid_argument_non_word_characters_in_name
     output = `./cheers ~*!`
@@ -129,6 +132,15 @@ EOS
   assert_equal expected, output
   end
 
+  def test_3e_more_than_two_arguments
+    output = `./cheers Abby Booger 08/25`
+    expected = <<EOS
+I'd cheer for you, if only I knew who you were :(
+Try again with `./cheers.rb [Name] [MM/DD Birthday]
+EOS
+    assert_equal expected, output
+  end
+
 # Test that Tests Two Valid Arguments
 
   def test_4a_two_valid_arguments_name_mm_dd
@@ -140,12 +152,21 @@ Give me a... B
 Give me a... Y
 Abby’s just GRAND!
 
-Awesome! Your birthday is in 126 days! Happy Birthday in advance!
+Awesome! Your birthday is in 124 days! Happy Birthday in advance!
 EOS
   assert_equal expected, output
   end
 
-def test_4b_two_valid_arguments_name_mm_dd
+  def test_4b_two_valid_arguments_name_mm_dd
+    output = `./cheers 1234 08/25`
+    expected = <<EOS
+I'd cheer for you, if only I knew who you were :(
+Try again with `./cheers.rb [Name] [MM/DD Birthday]
+EOS
+  assert_equal expected, output
+  end
+
+def test_4c_two_valid_arguments_name_m_dd
     output = `./cheers Abby 8/25`
     expected = <<EOS
 Give me an... A
@@ -154,28 +175,11 @@ Give me a... B
 Give me a... Y
 Abby’s just GRAND!
 
-Awesome! Your birthday is in 126 days! Happy Birthday in advance!
+Awesome! Your birthday is in 124 days! Happy Birthday in advance!
 EOS
   assert_equal expected, output
   end
 
-
-# Test that Tests One Valid and Invalid Argument
-
-#   def test_5a_one_valid_and_one_invalid_argument_non_number_chracters
-#     output = `./cheers Abby xA/25`
-#     expected = <<EOS
-# Give me an... A
-# Give me a... B
-# Give me a... B
-# Give me a... Y
-# Abby’s just GRAND!
-
-
-# I couldn't understand that. Could you give that to me in mm/dd format?
-# EOS
-#   assert_equal expected, output
-#   end
 
 def test_5a_one_valid_and_one_invalid_argument_no_month_equal
     output = `./cheers Abby 25/08`
@@ -186,12 +190,10 @@ Give me a... B
 Give me a... Y
 Abby’s just GRAND!
 
-
 I couldn't understand that. Could you give that to me in mm/dd format?
 EOS
   assert_equal expected, output
   end
-
 
 def test_5b_one_valid_and_one_invalid_argument_mm_dd_yyyy
     output = `./cheers Abby 08/25/2015`
@@ -201,22 +203,6 @@ Give me a... B
 Give me a... B
 Give me a... Y
 Abby’s just GRAND!
-
-
-I couldn't understand that. Could you give that to me in mm/dd format?
-EOS
-  assert_equal expected, output
-  end
-
-def test_5c_one_valid_and_one_invalid_argument_no_month_equal
-    output = `./cheers Abby May/08`
-    expected = <<EOS
-Give me an... A
-Give me a... B
-Give me a... B
-Give me a... Y
-Abby’s just GRAND!
-
 
 I couldn't understand that. Could you give that to me in mm/dd format?
 EOS

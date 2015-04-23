@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
-
+require 'date'
 # puts "I'd cheer for you, if only I knew who you were :(\nTry again with `./cheers.rb [Name] [MM/DD Birthday]"
-# ARGV is an array i.e. when we write abbey it get pushed into the ARGV array, Abbys name is the name in index 0 of the ARGV array
-
+# ARGV is an array i.e. when we write abby it get pushed into the ARGV array, Abbys name is the name in index 0 of the ARGV array
 def exit_with_usage_instructions
   puts <<EOS
 I'd cheer for you, if only I knew who you were :(
@@ -11,7 +10,7 @@ EOS
   exit
 end
 
-exit_with_usage_instructions if ARGV.empty?
+exit_with_usage_instructions if ARGV.empty? || ARGV.size > 2
 
 original_name = ARGV[0]
 cheerable_name = original_name.upcase.gsub(/[^A-Z]/, "")
@@ -24,7 +23,32 @@ end
 
 puts "#{original_name}’s just GRAND!"
 puts ""
-puts "I would wish you a Happy Birthday, if I knew when that was!"
 
+def print_birthday_error
+  puts "I would wish you a Happy Birthday, if I knew when that was!"
+end
 
+def print_invalid_birthday_input
+  puts "I couldn\'t understand that. Could you give that to me in mm/dd format?"
+end
 
+def get_bday_count(date)
+  birthday = Date.parse(date)
+  today = Date.today
+  count = (birthday - today) % 365
+  count.to_i
+end
+
+birthday = ARGV[1]
+if birthday.nil?
+  print_birthday_error
+elsif birthday.length > 5
+  print_invalid_birthday_input
+else
+  begin
+    count = get_bday_count(birthday)
+    puts "Awesome! Your birthday is in #{count} days! Happy Birthday in advance!"
+  rescue
+    print_invalid_birthday_input
+  end
+end
